@@ -58,7 +58,7 @@
         buttonElement = document.createElement("div");
 
       const priceElement = pageItems.finalPrice || pageItems.price;
-      const price = priceElement.innerText.replace(currencySymbol || "$", "");
+      const price = priceElement.innerText.replace((typeof currencySymbol === 'undefined') ? "$" : currencySymbol, "");
       const orderId = pageItems.orderNumber.innerText.replace("Order #", "");
 
       const url = btcPayServerUrl + "/invoices" + "?storeId=" + storeId + "&orderId=" + orderId + "&status=complete";
@@ -88,7 +88,11 @@
         BtcPayServerModal.show(
           btcPayServerUrl,
           storeId,
-          { price: price, currency: currency || 'USD', orderId: orderId }
+          {
+            price: price,
+            currency: (typeof currency === 'undefined') ? 'USD': currency,
+            orderId: orderId
+          }
         )
           .then(function (invoice) {
             if (invoice != null) {
